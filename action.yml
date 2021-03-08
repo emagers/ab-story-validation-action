@@ -1,0 +1,8 @@
+name: ab-story-validation
+description: A GitHub Action which validates that an Azure Boards story has been linked to a pull request
+runs:
+  using: docker
+  image: Dockerfile
+branding:
+  icon: activity
+  color: white
