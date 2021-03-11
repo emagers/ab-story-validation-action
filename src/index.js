@@ -3,7 +3,7 @@ const { parsePullRequestBody, storiesAreVerified } = require('./validationHelper
 
 // Run your GitHub Action!
 Toolkit.run(async tools => {
-	tools.log.debug(tools.context.payload);
+	tools.log.debug(JSON.stringify(tools.context.payload));
 
 	const stories = parsePullRequestBody(tools.context.payload);
 
