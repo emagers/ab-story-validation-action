@@ -26,7 +26,8 @@ describe('ab-story-validation', () => {
 		tools.context.payload.pull_request = {};
 		tools.context.payload.pull_request.number = NUMBER;
 		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = OWNER;
+		tools.context.payload.repository.owner = {};
+		tools.context.payload.repository.owner.login = OWNER;
 		tools.context.payload.repository.name = NAME;
 
 		const story = 'AB#123';
@@ -52,7 +53,8 @@ describe('ab-story-validation', () => {
 		tools.context.payload.pull_request = {};
 		tools.context.payload.pull_request.number = NUMBER;
 		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = OWNER;
+		tools.context.payload.repository.owner = {};
+		tools.context.payload.repository.owner.login = OWNER;
 		tools.context.payload.repository.name = NAME;
 
 		let getPullRequestDetails = jest.fn();
@@ -82,7 +84,8 @@ describe('ab-story-validation', () => {
 		tools.context.payload.pull_request = {};
 		tools.context.payload.pull_request.number = NUMBER;
 		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = OWNER;
+		tools.context.payload.repository.owner = {};
+		tools.context.payload.repository.owner.login = OWNER;
 		tools.context.payload.repository.name = NAME;
 
 		let getPullRequestDetails = jest.fn();
@@ -99,7 +102,8 @@ describe('ab-story-validation', () => {
 		tools.context.payload.pull_request = {};
 		tools.context.payload.pull_request.number = NUMBER;
 		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = OWNER;
+		tools.context.payload.repository.owner = {};
+		tools.context.payload.repository.owner.login = OWNER;
 		tools.context.payload.repository.name = NAME;
 
 		let getPullRequestDetails = jest.fn();

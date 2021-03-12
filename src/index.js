@@ -11,7 +11,7 @@ Toolkit.run(async (tools, getPRDetails=getPullRequestDetails) => {
 
 	const prDetails = await getPRDetails(
 		tools.github,
-		tools.context.payload.repository.owner,
+		tools.context.payload.repository.owner.login,
 		tools.context.payload.repository.name,
 		tools.context.payload.pull_request.number
 	);
