@@ -20,8 +20,6 @@ describe('ab-story-validation', () => {
 
 		tools.github = {};
 		tools.github.getOctokit = jest.fn();
-		tools.core = {};
-		tools.core.getInput = jest.fn();
 	});
 
 	it('succeeds when AB link is present', async () => {
