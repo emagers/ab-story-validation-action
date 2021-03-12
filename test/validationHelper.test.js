@@ -17,7 +17,7 @@ describe('validationHelper', () => {
 				}
 			});
 
-			pullRequest.userContentEdits = edits;
+			pullRequest.edits = edits;
 
 			expect(verificationHelper.storiesAreVerified(logger, stories, pullRequest)).toEqual(true);
 		});
@@ -26,7 +26,7 @@ describe('validationHelper', () => {
 			const stories = [ 'AB#123', 'AB#124' ];
 			const pullRequest = {};
 
-			pullRequest.userContentEdits = [{
+			pullRequest.edits = [{
 				diff: `[${stories[0]}](https://some.link)`,
 				editor: {
 					login: CONSTANTS.AB_BOT_NAME
@@ -38,32 +38,18 @@ describe('validationHelper', () => {
 	});
 
 	describe('parsePullRequestBody', () => {
-		it('returns null when payload is not a pull request', () => {
-			const payload = {};
+	it('returns empty array when no azure board story reference is present', () => {
+			const body = 'some pull request text';
 
-			expect(verificationHelper.parsePullRequestBody(payload)).toEqual(null);
-		});
-
-		it('returns empty array when no azure board story reference is present', () => {
-			const payload = {
-				pull_request: {
-					body: 'some pull request text'
-				}
-			};
-
-			expect(verificationHelper.parsePullRequestBody(payload)).toEqual([]);
+			expect(verificationHelper.parsePullRequestBody(body)).toEqual([]);
 		});
 
 		it('returns all azure board story references as an array', () => {
 			const stories = [ 'AB#123', 'AB#124' ];
 
-			const payload = {
-				pull_request: {
-					body: `${stories.join(" ")}`
-				}
-			};
+			const body = `${stories.join(" ")}`;
 
-			expect(verificationHelper.parsePullRequestBody(payload)).toEqual(stories);
+			expect(verificationHelper.parsePullRequestBody(body)).toEqual(stories);
 		});
 	});
 });

@@ -2,50 +2,75 @@ const { Toolkit } = require('actions-toolkit');
 const CONSTANTS = require('../src/constants');
 
 describe('ab-story-validation', () => {
-	let action, tools
+	let action, tools;
+	const OWNER = 'emagers';
+	const NAME = 'ab-story-validation';
+	const NUMBER = '10';
 
 	// Mock Toolkit.run to define `action` so we can call it
-	Toolkit.run = jest.fn((actionFn) => { action = actionFn })
+	Toolkit.run = jest.fn(async (actionFn) => { action = actionFn })
 	// Load up our entrypoint file
-	require('../src')
+	require('../src/index');
 
 	beforeEach(() => {
-		// Create a new Toolkit instance
 		tools = new Toolkit()
 		// Mock methods on it!
 		tools.exit.success = jest.fn();
 		tools.exit.failure = jest.fn();
+
+		tools.github = {};
+		tools.github.getOctokit = jest.fn();
+		tools.core = {};
+		tools.core.getInput = jest.fn();
 	});
 
-	it('succeeds when AB link is present', () => {
-		const story = 'AB#123';
+	it('succeeds when AB link is present', async () => {
 		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.body = story;
+		tools.context.payload.pull_request.repository = {};
+		tools.context.payload.pull_request.repository.owner = OWNER;
+		tools.context.payload.pull_request.repository.name = NAME;
+		tools.context.payload.pull_request.number = NUMBER;
 
-		tools.context.payload.pull_request.userContentEdits = [{
-			diff: `[${story}](https://some.link)`,
-			editor: {
-				login: CONSTANTS.AB_BOT_NAME
+		const story = 'AB#123';
+
+		let getPullRequestDetails = jest.fn();
+		getPullRequestDetails.mockReturnValue(Promise.resolve(
+			{
+				body: story,
+				edits: [{
+					diff: `[${story}](https://some.link)`,
+					editor: {
+						login: CONSTANTS.AB_BOT_NAME
+					}
+				}]
 			}
-		}];
+		));
 
-		action(tools);
+		await action(tools, getPullRequestDetails);
 		expect(tools.exit.success).toHaveBeenCalled();
 	});
 
-	it('fails when any AB link is not verified', () => {
+	it('fails when any AB link is not verified', async () => {
 		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.body = 'AB#123 AB#142';
+		tools.context.payload.pull_request.repository = {};
+		tools.context.payload.pull_request.repository.owner = OWNER;
+		tools.context.payload.pull_request.repository.name = NAME;
+		tools.context.payload.pull_request.number = NUMBER;
 
-		tools.context.payload.pull_request.userContentEdits = [{
-			diff: '[AB#123](https://some.link)',
-			editor: {
-				login: CONSTANTS.AB_BOT_NAME
-			}
-		}];
+		let getPullRequestDetails = jest.fn();
+		getPullRequestDetails.mockReturnValue(Promise.resolve({
+			body: 'AB#123 AB#142',
+			edits: [{
+				diff: '[AB#123](https://some.link)',
+				editor: {
+					login: CONSTANTS.AB_BOT_NAME
+				}
+			}]
+		}));
 
-		action(tools);
-		expect(tools.exit.failure).toHaveBeenCalled();
+		await action(tools, getPullRequestDetails);
+
+		expect(tools.exit.failure).toHaveBeenCalledTimes(1);
 	});
 
 	it('succeeds when not a pull request', () => {
@@ -55,19 +80,37 @@ describe('ab-story-validation', () => {
 		expect(tools.exit.success).toHaveBeenCalled();
 	});
 
-	it('fails when it is a pull request with invalid AB link format', () => {
+	it('fails when it is a pull request with invalid AB link format', async () => {
 		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.body = "AB#ABC";
+		tools.context.payload.pull_request.repository = {};
+		tools.context.payload.pull_request.repository.owner = OWNER;
+		tools.context.payload.pull_request.repository.name = NAME;
+		tools.context.payload.pull_request.number = NUMBER;
 
-		action(tools);
+		let getPullRequestDetails = jest.fn();
+		getPullRequestDetails.mockReturnValue(Promise.resolve({
+			body: "AB#ABC",
+			edits: []
+		}));
+
+		await action(tools, getPullRequestDetails);
 		expect(tools.exit.failure).toHaveBeenCalled();
 	});
 
-	it('fails when it is a pull request with no AB link', () => {
+	it('fails when it is a pull request with no AB link', async () => {
 		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.body = "";
+		tools.context.payload.pull_request.repository = {};
+		tools.context.payload.pull_request.repository.owner = OWNER;
+		tools.context.payload.pull_request.repository.name = NAME;
+		tools.context.payload.pull_request.number = NUMBER;
 
-		action(tools);
+		let getPullRequestDetails = jest.fn();
+		getPullRequestDetails.mockReturnValue(Promise.resolve({
+			body: "",
+			edits: []
+		}));
+
+		await action(tools, getPullRequestDetails);
 		expect(tools.exit.failure).toHaveBeenCalled();
 	});
 });

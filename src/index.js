@@ -1,16 +1,25 @@
 const { Toolkit } = require('actions-toolkit');
+const { getPullRequestDetails } = require('./pullRequestDetails');
 const { parsePullRequestBody, storiesAreVerified } = require('./validationHelpers');
 
 // Run your GitHub Action!
-Toolkit.run(async tools => {
-	tools.log.debug(JSON.stringify(tools.context.payload));
-
-	const stories = parsePullRequestBody(tools.context.payload);
-
-	if (stories === null) {
+Toolkit.run(async (tools, getPRDetails=getPullRequestDetails) => {
+	if (!tools.context.payload.pull_request) {
 		tools.exit.success('Change is not a pull request, skipping validation');
 		return;
 	}
+
+	const token = tools.core.getInput('GITHUB_TOKEN');
+	const octokit = tools.github.getOctokit(token);
+
+	const prDetails = await getPRDetails(
+		octokit,
+		tools.context.payload.pull_request.repository.owner,
+		tools.context.payload.pull_request.repository.name,
+		tools.context.payload.pull_request.number
+	);
+
+	const stories = parsePullRequestBody(prDetails.body);
 
 	if (stories.length === 0) {
 		tools.log.error('No Azure Board link found in pull request. Please update the Pull Request with a link in the format of AB#<story number>.');
@@ -18,12 +27,14 @@ Toolkit.run(async tools => {
 		return;
 	}
 
-	if (!storiesAreVerified(tools.log, stories, tools.context.payload.pull_request)) {
+	if (!storiesAreVerified(tools.log, stories, prDetails)) {
 		tools.log.error('Some referenced stories could not be linked');
 		tools.exit.failure();
 		return;
 	}
 
 	tools.exit.success('Azure Board link exists');
+}, {
+  secrets: ['GITHUB_TOKEN']
 });
 
