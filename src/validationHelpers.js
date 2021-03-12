@@ -6,7 +6,7 @@ const storiesAreVerified = function(log, stories, pullRequest) {
 };
 
 const storyIsVerified = function(log, story, pullRequest) {
-	const verified = pullRequest.userContentEdits.some(edit => edit.diff.includes(story) && edit.editor.login === CONSTANTS.AB_BOT_NAME);
+	const verified = pullRequest.edits.some(edit => edit.diff.includes(story) && edit.editor.login === CONSTANTS.AB_BOT_NAME);
 
 	if (!verified) {
 		log.error(`${story} was not validated by ${CONSTANTS.AB_BOT_NAME}`);
@@ -15,10 +15,8 @@ const storyIsVerified = function(log, story, pullRequest) {
 	return verified;
 };
 
-const parsePullRequestBody = function(payload) {
-	if (!payload.pull_request) return null;
-
-	let matches = payload.pull_request.body.match(CONSTANTS.AB_LINK_EXPRESSION);
+const parsePullRequestBody = function(body) {
+	let matches = body.match(CONSTANTS.AB_LINK_EXPRESSION);
 	return matches === null ? [] : matches;
 };
 
