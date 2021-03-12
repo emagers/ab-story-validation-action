@@ -1,6 +1,6 @@
 module.exports = {
-	getPullRequestDetails: async function (octokit, owner, repo, num) {
-		const { pullRequests } = await octokit.graphql(
+	getPullRequestDetails: async function (logger, octokit, owner, repo, num) {
+		const result = await octokit.graphql(
 			`
 				query pullRequests($owner: String!, $repo: String!, $num: Int!) {
 					repository(owner:$owner,name:$repo) {
@@ -29,9 +29,11 @@ module.exports = {
 			}
 		);
 
+		logger.debug(JSON.stringify(result));
+
 		return {
-			body: pullRequests.data.repository.pullRequest.body,
-			edits: pullRequests.data.repository.pullRequest.userContentEdits
+			body: result.data.repository.pullRequest.body,
+			edits: result.data.repository.pullRequest.userContentEdits
 		};
 	}
 };
