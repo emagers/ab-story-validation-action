@@ -20,16 +20,16 @@ describe('ab-story-validation', () => {
 
 		tools.github = {};
 		tools.github.graphql = jest.fn();
-	});
 
-	it('succeeds when AB link is present', async () => {
 		tools.context.payload.pull_request = {};
 		tools.context.payload.pull_request.number = NUMBER;
 		tools.context.payload.repository = {};
 		tools.context.payload.repository.owner = {};
 		tools.context.payload.repository.owner.login = OWNER;
 		tools.context.payload.repository.name = NAME;
+	});
 
+	it('succeeds when AB link is present', async () => {
 		const story = 'AB#123';
 
 		let getPullRequestDetails = jest.fn();
@@ -50,13 +50,6 @@ describe('ab-story-validation', () => {
 	});
 
 	it('fails when any AB link is not verified', async () => {
-		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.number = NUMBER;
-		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = {};
-		tools.context.payload.repository.owner.login = OWNER;
-		tools.context.payload.repository.name = NAME;
-
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: 'AB#123 AB#142',
@@ -81,13 +74,6 @@ describe('ab-story-validation', () => {
 	});
 
 	it('fails when it is a pull request with invalid AB link format', async () => {
-		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.number = NUMBER;
-		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = {};
-		tools.context.payload.repository.owner.login = OWNER;
-		tools.context.payload.repository.name = NAME;
-
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: "AB#ABC",
@@ -99,13 +85,6 @@ describe('ab-story-validation', () => {
 	});
 
 	it('fails when it is a pull request with no AB link', async () => {
-		tools.context.payload.pull_request = {};
-		tools.context.payload.pull_request.number = NUMBER;
-		tools.context.payload.repository = {};
-		tools.context.payload.repository.owner = {};
-		tools.context.payload.repository.owner.login = OWNER;
-		tools.context.payload.repository.name = NAME;
-
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: "",
