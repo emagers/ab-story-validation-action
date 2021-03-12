@@ -26,10 +26,7 @@ module.exports = {
 			{
 				owner: owner,
 				repo: repo,
-				num: num,
-				headers: {
-					authorization: `token ${apiKey}`,
-				},
+				num: num
 			}
 		);
 
