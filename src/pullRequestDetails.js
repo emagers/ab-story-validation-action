@@ -32,8 +32,8 @@ module.exports = {
 		logger.debug(JSON.stringify(result));
 
 		return {
-			body: result.data.repository.pullRequest.body,
-			edits: result.data.repository.pullRequest.userContentEdits
+			body: result.repository.pullRequest.body,
+			edits: result.repository.pullRequest.userContentEdits.nodes
 		};
 	}
 };
