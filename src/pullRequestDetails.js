@@ -22,11 +22,10 @@ module.exports = {
 						}
 					}
 				}
-			`,
-			{
-				owner: owner,
-				repo: repo,
-				num: num
+			`, {
+				owner,
+				repo,
+				num
 			}
 		);
 
