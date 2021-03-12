@@ -2,7 +2,7 @@ module.exports = {
 	getPullRequestDetails: async function (octokit, owner, repo, num) {
 		const { pullRequests } = await octokit.graphql(
 			`
-				query pullRequests($owner: String!, $repo: String!, $num: Int) {
+				query pullRequests($owner: String!, $repo: String!, $num: Int!) {
 					repository(owner:$owner,name:$repo) {
 						pullRequest(number:$num) {
 							body,
