@@ -1,5 +1,3 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
 const { Toolkit } = require('actions-toolkit');
 const { getPullRequestDetails } = require('./pullRequestDetails');
 const { parsePullRequestBody, storiesAreVerified } = require('./validationHelpers');
@@ -11,11 +9,8 @@ Toolkit.run(async (tools, getPRDetails=getPullRequestDetails) => {
 		return;
 	}
 
-	const token = core.getInput('GITHUB_TOKEN');
-	const octokit = github.getOctokit(token);
-
 	const prDetails = await getPRDetails(
-		octokit,
+		tools.github,
 		tools.context.payload.pull_request.repository.owner,
 		tools.context.payload.pull_request.repository.name,
 		tools.context.payload.pull_request.number

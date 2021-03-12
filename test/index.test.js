@@ -19,7 +19,7 @@ describe('ab-story-validation', () => {
 		tools.exit.failure = jest.fn();
 
 		tools.github = {};
-		tools.github.getOctokit = jest.fn();
+		tools.github.graphql = jest.fn();
 	});
 
 	it('succeeds when AB link is present', async () => {
