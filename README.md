@@ -3,7 +3,7 @@ An action to validate that pull requests are commented with a valid link to an A
 
 ## Usage
 
-In order for this action to validate that the Azure Board story link exists and is valid, the repository must be integrated with the Azure Boards bot. The action will parse the pull request body and find all Azure Board story references in the format of `AB#<[\d]+>` and then call GitHubs GraphQL API to retrieve all of the pull requests events, and match all of the `AB#` references to an edit made by the Azure Board bot. 
+In order for this action to validate that the Azure Board story link exists and is valid, the repository must be integrated with the Azure Boards bot. The action will parse the pull request body and find all Azure Board story references in the format of `AB#[\d]+` and then call GitHubs GraphQL API to retrieve all of the pull requests events, and match all of the `AB#` references to an edit made by the Azure Board bot. 
 
 It's recommended that you trigger this action on the following pull request event types: `[ opened, edited, reopened ]`. See [workflow triggers](https://docs.github.com/en/actions/reference/events-that-trigger-workflows) for more information. 
 
