@@ -10,6 +10,6 @@
     "actions-toolkit": "^6.0.1"
   },
   "devDependencies": {
-    "jest": "^26.0.1"
+    "jest": "^27.0.0"
   }
 }
