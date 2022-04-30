@@ -10,7 +10,7 @@ describe('ab-story-validation', () => {
 	// Mock Toolkit.run to define `action` so we can call it
 	Toolkit.run = jest.fn(async (actionFn) => { action = actionFn })
 	// Load up our entrypoint file
-	require('../src/index');
+	require('../index');
 
 	beforeEach(() => {
 		tools = new Toolkit()

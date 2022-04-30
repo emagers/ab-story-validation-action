@@ -1,6 +1,6 @@
 const { Toolkit } = require('actions-toolkit');
-const { getPullRequestDetails } = require('./pullRequestDetails');
-const { parsePullRequestBody, storiesAreVerified } = require('./validationHelpers');
+const { getPullRequestDetails } = require('./src/pullRequestDetails');
+const { parsePullRequestBody, storiesAreVerified } = require('./src/validationHelpers');
 
 // Run your GitHub Action!
 Toolkit.run(async (tools, getPRDetails=getPullRequestDetails) => {
