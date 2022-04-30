@@ -8856,8 +8856,8 @@ async function run(getPRDetails=getPullRequestDetails) {
 	const { pull_request } = context.payload.pull_request;
 
 	core.info(JSON.stringify(pull_request));
-	core.info(context.repository.owner.login);
-	core.info(context.repository.name);
+	core.info(context.payload.repository.owner.login);
+	core.info(context.payload.repository.name);
 	core.info(pull_request.number);
 
 	if (!pull_request) {
@@ -8867,8 +8867,8 @@ async function run(getPRDetails=getPullRequestDetails) {
 
 	const prDetails = await getPRDetails(
 		github.getOctokit(token),
-		context.repository.owner.login,
-		context.repository.name,
+		context.payload.repository.owner.login,
+		context.payload.repository.name,
 		pull_request.number
 	);
 
