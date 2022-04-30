@@ -8600,6 +8600,55 @@ module.exports = {
 
 /***/ }),
 
+/***/ 6381:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(6398);
+const github = __nccwpck_require__(174);
+const { getPullRequestDetails } = __nccwpck_require__(975);
+const { parsePullRequestBody, storiesAreVerified } = __nccwpck_require__(2147);
+
+async function run(getPRDetails=getPullRequestDetails) {
+	const token = core.getInput('GITHUB_TOKEN');
+	const { context = {} } = github;
+	const pull_request = context.payload.pull_request;
+
+	core.info(JSON.stringify(pull_request));
+	core.info(context.payload.repository.owner.login);
+	core.info(context.payload.repository.name);
+	core.info(pull_request.number);
+
+	if (!pull_request) {
+		core.info('Change is not a pull request, skipping validation');
+		return;
+	}
+
+	const prDetails = await getPRDetails(
+		github.getOctokit(token),
+		context.payload.repository.owner.login,
+		context.payload.repository.name,
+		pull_request.number
+	);
+
+	const stories = parsePullRequestBody(prDetails.body);
+
+	if (stories.length === 0) {
+		core.setFailed('No Azure Board link found in pull request. Please update the Pull Request with a link in the format of AB#<story number>.');
+		return;
+	}
+
+	if (!storiesAreVerified(core, stories, prDetails)) {
+		core.setFailed('Some referenced stories could not be linked');
+		return;
+	}
+
+	core.info('Azure Board link exists');
+}
+
+module.exports = run;
+
+/***/ }),
+
 /***/ 975:
 /***/ ((module) => {
 
@@ -8844,48 +8893,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const core = __nccwpck_require__(6398);
-const github = __nccwpck_require__(174);
-const { getPullRequestDetails } = __nccwpck_require__(975);
-const { parsePullRequestBody, storiesAreVerified } = __nccwpck_require__(2147);
-
-// Run your GitHub Action!
-async function run(getPRDetails=getPullRequestDetails) {
-	const token = core.getInput('GITHUB_TOKEN');
-	const { context = {} } = github;
-	const { pull_request } = context.payload.pull_request;
-
-	core.info(JSON.stringify(pull_request));
-	core.info(context.payload.repository.owner.login);
-	core.info(context.payload.repository.name);
-	core.info(pull_request.number);
-
-	if (!pull_request) {
-		core.success('Change is not a pull request, skipping validation');
-		return;
-	}
-
-	const prDetails = await getPRDetails(
-		github.getOctokit(token),
-		context.payload.repository.owner.login,
-		context.payload.repository.name,
-		pull_request.number
-	);
-
-	const stories = parsePullRequestBody(prDetails.body);
-
-	if (stories.length === 0) {
-		core.setFailed('No Azure Board link found in pull request. Please update the Pull Request with a link in the format of AB#<story number>.');
-		return;
-	}
-
-	if (!storiesAreVerified(core, stories, prDetails)) {
-		core.setFailed('Some referenced stories could not be linked');
-		return;
-	}
-
-	core.success('Azure Board link exists');
-}
+const run = __nccwpck_require__(6381);
 
 run();
 })();
