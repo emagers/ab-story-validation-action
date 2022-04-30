@@ -5,16 +5,16 @@ const { parsePullRequestBody, storiesAreVerified } = require('./src/validationHe
 
 // Run your GitHub Action!
 async function run(getPRDetails=getPullRequestDetails) {
-	if (!tools.context.payload.pull_request) {
-		core.success('Change is not a pull request, skipping validation');
-		return;
-	}
-
 	const token = core.getInput('GITHUB_TOKEN');
 	const { context = {} } = github;
 	const { pull_request } = context.payload;
 
 	core.info(context);
+
+	if (!pull_request) {
+		core.success('Change is not a pull request, skipping validation');
+		return;
+	}
 
 	const prDetails = await getPRDetails(
 		github.getOctokit(token),
