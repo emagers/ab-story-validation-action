@@ -8853,9 +8853,12 @@ const { parsePullRequestBody, storiesAreVerified } = __nccwpck_require__(2147);
 async function run(getPRDetails=getPullRequestDetails) {
 	const token = core.getInput('GITHUB_TOKEN');
 	const { context = {} } = github;
-	const { pull_request } = context.payload;
+	const { pull_request } = context.payload.pull_request;
 
-	core.info(JSON.stringify(context));
+	core.info(JSON.stringify(pull_request));
+	core.info(context.repository.owner.login);
+	core.info(context.repository.name);
+	core.info(pull_request.number);
 
 	if (!pull_request) {
 		core.success('Change is not a pull request, skipping validation');
@@ -8864,8 +8867,8 @@ async function run(getPRDetails=getPullRequestDetails) {
 
 	const prDetails = await getPRDetails(
 		github.getOctokit(token),
-		context.payload.repository.owner.login,
-		context.payload.repository.name,
+		context.repository.owner.login,
+		context.repository.name,
 		pull_request.number
 	);
 
