@@ -5,10 +5,11 @@
   "scripts": {
     "start": "node ./src/index.js",
     "test": "jest",
-		"bundle": "ncc build index.js --license licenses.txt"
+    "bundle": "ncc build index.js --license licenses.txt"
   },
   "dependencies": {
-    "actions-toolkit": "^6.0.1"
+    "@actions/core": "^1.7.0",
+    "@actions/github": "^5.0.1"
   },
   "devDependencies": {
     "jest": "^27.0.0"

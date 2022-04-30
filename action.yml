@@ -1,8 +1,8 @@
-name: ab-story-validation
-description: A GitHub Action which validates that an Azure Boards story has been linked to a pull request
+name: 'ab-story-validation'
+description: 'A GitHub Action which validates that an Azure Boards story has been linked to a pull request'
 runs:
-  using: node16
-  image: dist/index.js
+  using: 'node16'
+  image: 'dist/index.js'
 branding:
-  icon: activity
-  color: white
+  icon: 'activity'
+  color: 'white'

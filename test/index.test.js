@@ -1,4 +1,5 @@
-const { Toolkit } = require('actions-toolkit');
+const core = require('@actions/core');
+const github = require('@actions/github');
 const CONSTANTS = require('../src/constants');
 
 describe('ab-story-validation', () => {
