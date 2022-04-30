@@ -8,11 +8,6 @@ async function run(getPRDetails=getPullRequestDetails) {
 	const { context = {} } = github;
 	const pull_request = context.payload.pull_request;
 
-	core.info(JSON.stringify(pull_request));
-	core.info(context.payload.repository.owner.login);
-	core.info(context.payload.repository.name);
-	core.info(pull_request.number);
-
 	if (!pull_request) {
 		core.info('Change is not a pull request, skipping validation');
 		return;
