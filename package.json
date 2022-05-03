@@ -12,6 +12,6 @@
     "@actions/github": "^5.0.1"
   },
   "devDependencies": {
-    "jest": "^27.0.0"
+    "jest": "^28.0.3"
   }
 }
