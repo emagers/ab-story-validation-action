@@ -85,3 +85,4 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         delete-old-comments: true
         title: 'AB Story Validation Test Results'
+      if: github.event_name == 'pull_request'
