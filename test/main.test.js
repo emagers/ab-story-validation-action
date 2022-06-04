@@ -6,9 +6,9 @@ jest.mock('@actions/core', () => ({
 	__esModule: true,
 	...jest.requireActual('@actions/core'),
 	setFailed: jest.fn(),
-	info: jest.fn().mockImplementation(() => {}),
+	info: jest.fn().mockImplementation(() => { }),
 	getInput: jest.fn(),
-	error: jest.fn()
+	error: jest.fn(),
 })).mock('@actions/github', () => ({
 	__esModule: true,
 	...jest.requireActual('@actions/github'),
@@ -27,6 +27,8 @@ jest.mock('@actions/core', () => ({
 		}
 	}
 }));
+
+process.env.GITHUB_STEP_SUMMARY = "/dev/null";
 
 describe('ab-story-validation', () => {
 	let action;

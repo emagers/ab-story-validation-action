@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { getPullRequestDetails } = require('./pullRequestDetails');
-const { parsePullRequestBody, storiesAreVerified } = require('./validationHelpers');
+const { parsePullRequestBody, verifyStories } = require('./validationHelpers');
 
 async function run(getPRDetails=getPullRequestDetails) {
 	const token = core.getInput('GITHUB_TOKEN');
@@ -27,7 +27,17 @@ async function run(getPRDetails=getPullRequestDetails) {
 		return;
 	}
 
-	if (!storiesAreVerified(core, stories, prDetails)) {
+	const verifications = verifyStories(core, stories, prDetails);
+
+	const data = [[{data: 'AB Story', heading: true }, {data: 'Verified', heading: true}]];
+	verifications.forEach(v => data.push([v.story, v.verification ? '✅' : '❌']));
+
+	await core.summary
+		.addHeading("AB Story Verification Status")
+		.addTable(data)
+		.write();
+
+	if (verifications.some(verification => verification.verified === false)) {
 		core.setFailed('Some referenced stories could not be linked');
 		return;
 	}

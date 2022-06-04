@@ -1,8 +1,7 @@
 const CONSTANTS = require('./constants');
 
-const storiesAreVerified = function(log, stories, pullRequest) {
-	return stories.map(story => storyIsVerified(log, story, pullRequest))
-								.every(verified => verified === true);
+const verifyStories = function(log, stories, pullRequest) {
+	return stories.map(function(s) { return { story: s, verified: storyIsVerified(log, s, pullRequest) } });
 };
 
 const storyIsVerified = function(log, story, pullRequest) {
@@ -22,5 +21,5 @@ const parsePullRequestBody = function(body) {
 
 module.exports = {
 	parsePullRequestBody,
-	storiesAreVerified
+	verifyStories
 }
