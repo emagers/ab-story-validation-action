@@ -23,6 +23,11 @@ async function run(getPRDetails=getPullRequestDetails) {
 	const stories = parsePullRequestBody(prDetails.body);
 
 	if (stories.length === 0) {
+		await core.summary
+			.addHeading("AB Story Verification")
+			.addRaw('No Azure Board link found in pull request. Please update the Pull Request with a link in the format of AB#<story number>.')
+			.write();
+
 		core.setFailed('No Azure Board link found in pull request. Please update the Pull Request with a link in the format of AB#<story number>.');
 		return;
 	}
