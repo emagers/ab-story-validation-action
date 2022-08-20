@@ -82,5 +82,5 @@ jobs:
       uses: vebr/jest-lcov-reporter@eacce47f9cc1b8dff73ddaca35a3b9e797b9207f
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        lcov-file: ./coverage/lcov.inf
+        lcov-file: ./coverage/lcov.info
       if: github.event_name == 'pull_request'
