@@ -78,11 +78,9 @@ jobs:
       env:
         CI: true
     
-    - name: Report
-      uses: romeovs/lcov-reporter-action@v0.3.1
+    - name: Jest Lcov Reporter
+      uses: vebr/jest-lcov-reporter@eacce47f9cc1b8dff73ddaca35a3b9e797b9207f
       with:
-        lcov-file: ./coverage/lcov.info
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        delete-old-comments: true
-        title: 'AB Story Validation Test Results'
+        lcov-file: ./coverage/lcov.inf
       if: github.event_name == 'pull_request'
