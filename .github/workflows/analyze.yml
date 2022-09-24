@@ -58,6 +58,9 @@ jobs:
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
   codecov:
+    permissions:
+      pull-requests: write
+
     name: Build and Test
     runs-on: 'ubuntu-latest'
 
