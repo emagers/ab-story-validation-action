@@ -33,10 +33,6 @@ process.env.GITHUB_STEP_SUMMARY = "/dev/null";
 describe('ab-story-validation', () => {
 	let action;
 
-	afterEach(() => {
-		jest.restoreAllMocks();
-	});
-
 	it('succeeds when AB link is present', async () => {
 		const story = 'AB#123';
 
