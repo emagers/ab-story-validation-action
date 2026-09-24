@@ -65188,7 +65188,7 @@ const parsePullRequestBody = function(body) {
 async function run(getPRDetails=getPullRequestDetails) {
 	const token = getInput('GITHUB_TOKEN');
 	const context = github_context ?? {};
-	const pull_request = context.payload.pull_request;
+	const pull_request = context.payload?.pull_request;
 
 	if (!pull_request) {
 		info('Change is not a pull request, skipping validation');

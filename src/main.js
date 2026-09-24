@@ -6,7 +6,7 @@ import { parsePullRequestBody, verifyStories } from './validationHelpers.js';
 async function run(getPRDetails=getPullRequestDetails) {
 	const token = core.getInput('GITHUB_TOKEN');
 	const context = github.context ?? {};
-	const pull_request = context.payload.pull_request;
+	const pull_request = context.payload?.pull_request;
 
 	if (!pull_request) {
 		core.info('Change is not a pull request, skipping validation');
