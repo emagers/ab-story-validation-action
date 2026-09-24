@@ -1,5 +1,6 @@
-let verificationHelper = require('../src/validationHelpers');
-const CONSTANTS = require('../src/constants');
+import * as verificationHelper from '../src/validationHelpers.js';
+import { jest } from '@jest/globals';
+import CONSTANTS from '../src/constants.js';
 
 describe('validationHelper', () => {
 	const logger = { error: jest.fn() };

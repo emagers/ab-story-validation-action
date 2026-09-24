@@ -1,12 +1,12 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const { getPullRequestDetails } = require('./pullRequestDetails');
-const { parsePullRequestBody, verifyStories } = require('./validationHelpers');
+import * as core from '@actions/core';
+import * as github from '@actions/github';
+import { getPullRequestDetails } from './pullRequestDetails.js';
+import { parsePullRequestBody, verifyStories } from './validationHelpers.js';
 
 async function run(getPRDetails=getPullRequestDetails) {
 	const token = core.getInput('GITHUB_TOKEN');
-	const { context = {} } = github;
-	const pull_request = context.payload.pull_request;
+	const context = github.context ?? {};
+	const pull_request = context.payload?.pull_request;
 
 	if (!pull_request) {
 		core.info('Change is not a pull request, skipping validation');
@@ -50,4 +50,4 @@ async function run(getPRDetails=getPullRequestDetails) {
 	core.info('Azure Board link exists');
 }
 
-module.exports = run;
+export default run;

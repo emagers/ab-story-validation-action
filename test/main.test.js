@@ -1,17 +1,18 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
-const CONSTANTS = require('../src/constants');
+import { jest } from '@jest/globals';
+import CONSTANTS from '../src/constants.js';
 
-jest.mock('@actions/core', () => ({
-	__esModule: true,
-	...jest.requireActual('@actions/core'),
+process.env.GITHUB_STEP_SUMMARY = "/dev/null";
+
+const core = {
+	...(await import('@actions/core')),
 	setFailed: jest.fn(),
 	info: jest.fn().mockImplementation(() => { }),
 	getInput: jest.fn(),
 	error: jest.fn(),
-})).mock('@actions/github', () => ({
-	__esModule: true,
-	...jest.requireActual('@actions/github'),
+};
+
+const github = {
+	...(await import('@actions/github')),
 	getOctokit: jest.fn(),
 	context: {
 		payload: {
@@ -26,13 +27,14 @@ jest.mock('@actions/core', () => ({
 			}
 		}
 	}
-}));
+};
 
-process.env.GITHUB_STEP_SUMMARY = "/dev/null";
+jest.unstable_mockModule('@actions/core', () => core);
+jest.unstable_mockModule('@actions/github', () => github);
+
+const action = (await import('../src/main.js')).default;
 
 describe('ab-story-validation', () => {
-	let action;
-
 	it('succeeds when AB link is present', async () => {
 		const story = 'AB#123';
 
@@ -48,14 +50,11 @@ describe('ab-story-validation', () => {
 				}]
 			}
 		));
-		action = require('../src/main');
-
 		await action(getPullRequestDetails);
 		expect(core.info).toHaveBeenCalled();
 	});
 
 	it('fails when any AB link is not verified', async () => {
-		action = require('../src/main');
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: 'AB#123 AB#142',
@@ -72,7 +71,6 @@ describe('ab-story-validation', () => {
 	});
 
 	it('succeeds when not a pull request', async () => {
-		action = require('../src/main');
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: "AB#ABC",
@@ -85,7 +83,6 @@ describe('ab-story-validation', () => {
 	});
 
 	it('fails when it is a pull request with invalid AB link format', async () => {
-		action = require('../src/main');
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: "AB#ABC",
@@ -97,7 +94,6 @@ describe('ab-story-validation', () => {
 	});
 
 	it('fails when it is a pull request with no AB link', async () => {
-		action = require('../src/main');
 		let getPullRequestDetails = jest.fn();
 		getPullRequestDetails.mockReturnValue(Promise.resolve({
 			body: "",
