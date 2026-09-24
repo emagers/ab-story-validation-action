@@ -1,4 +1,4 @@
-const CONSTANTS = require('./constants');
+import CONSTANTS from './constants.js';
 
 const verifyStories = function(log, stories, pullRequest) {
 	return stories.map(function(s) { return { story: s, verified: storyIsVerified(log, s, pullRequest) } });
@@ -19,7 +19,7 @@ const parsePullRequestBody = function(body) {
 	return matches === null ? [] : matches;
 };
 
-module.exports = {
+export {
 	parsePullRequestBody,
 	verifyStories
 }
